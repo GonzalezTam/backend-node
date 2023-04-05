@@ -22,9 +22,13 @@ class ProductManager {
     if (products.some(p => p.code === product.code)) {
       throw new Error(`Product with code "${product.code}" already exists`);
     }
+
+    //(products.length) ? console.log('next id: ', products[products.length - 1].id + 1) : console.log('next id: ', 0);
+    const id =  products.length ? products[products.length - 1].id + 1 : 0;
+
     const newProduct = {
       ...product,
-      id: ++this.lastId,
+      id,
     };
     products.push(newProduct);
 		console.log('Added product: ', newProduct.title);
@@ -113,6 +117,7 @@ let productManager = new ProductManager("./products.json");
 // Metodos para probar (probar uno a la vez y notar como se actualiza el archivo products.json)
 //productManager.getProducts();
 //productManager.addProduct(dogMemeNFT);
+//productManager.addProduct(cookie);
 //productManager.getProducts();
 //productManager.getProductById(3);
 //productManager.getProductById(1);
