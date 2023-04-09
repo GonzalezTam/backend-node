@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Dog Meme NFT",
+    "description": "Most expensive meme ever, but worth it",
+    "price": 9990,
+    "stock": 1,
+    "code": 555,
+    "thumbnail": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1024-512,f_auto,q_auto:best/rockcms/2022-01/210602-doge-meme-nft-mb-1715-8afb7e.jpg",
+    "id": 0
+  },
+  {
+    "title": "Cookie",
+    "description": "Regular chocolate chip cookie",
+    "price": 1,
+    "stock": 1,
+    "code": 333,
+    "thumbnail": "https://media.istockphoto.com/id/517109442/photo/chocolate-chip-cookie-isolated.jpg?s=612x612&w=0&k=20&c=RgZOYwzVRTXnIBy8zSkXK-wJfNBy9w023UGULkbH_VE=",
+    "id": 1
+  },
+  {
+    "title": "Strawberry",
+    "description": "Fresh strawberry",
+    "price": 1,
+    "stock": 1,
+    "code": 444,
+    "thumbnail": "https://www.gardeningknowhow.com/wp-content/uploads/2021/07/strawberry.jpg",
+    "id": 2
+  },
+  {
+    "title": "Car",
+    "description": "A car",
+    "price": 100000,
+    "stock": 1,
+    "code": 666,
+    "thumbnail": "https://cars.usnews.com/static/images/Auto/izmo/i159615234/2023_acura_integra_angularfront.jpg",
+    "id": 3
+  }
+]
