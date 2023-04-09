@@ -16,5 +16,11 @@ app.get('/', (req, res) => {
 // Si se recibe el query param limit, devolver la cantidad de productos indicada por el valor del query param.
 // Si no se recibe el query param limit, devolver todos los productos.
 app.get('/products', (req, res) => {
-	res.send({ products });
+	const limit = req.query.limit;
+	if (limit) {
+		const productsLimit = products.slice(0, limit);
+		res.send({ products: productsLimit });
+	} else {
+		res.send({ products });
+	}
 });
