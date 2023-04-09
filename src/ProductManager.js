@@ -44,9 +44,9 @@ class ProductManager {
     const products = await this.getProductsFromFile();
     const product = products.find(p => p.id === id);
     if (!product) {
-      throw new Error(`Product with ID "${id}" not found`);
+      console.error(`Product with ID "${id}" not found`);
     } else {
-			console.log('Product found: ', product.title);
+			//console.log('Product found: ', product.title);
 		}
     return product;
   }
@@ -80,7 +80,7 @@ class ProductManager {
   async getProductsFromFile(type) {
     try {
       const fileContents = await fs.readFile(this.namefile, 'utf-8');
-			if (type === 'getProducts') console.log(fileContents);
+			//if (type === 'getProducts') console.log(fileContents);
       return JSON.parse(fileContents);
     } catch (err) {
       console.error(`Error loading ${this.namefile}:`, err);
@@ -130,6 +130,69 @@ const car = {
   thumbnail: 'https://cars.usnews.com/static/images/Auto/izmo/i159615234/2023_acura_integra_angularfront.jpg'
 }
 
+const guitar = {
+  title: 'Guitar',
+  description: 'A guitar',
+  price: 200,
+  stock: 1,
+  code: 777,
+  thumbnail: 'https://bienestarconfort.com.ar/wp-content/uploads/2022/10/guitarra-bamboo7-02638dec1c2871de8115865484794780-1024-1024.png'
+}
+
+const bottle = {
+  title: 'Bottle',
+  description: 'A bottle',
+  price: 10,
+  stock: 5,
+  code: 888,
+  thumbnail: 'https://sublitextil.com.ar/wp-content/uploads/2019/04/Botella-Deportiva-Sublimable.png'
+}
+
+const basketball = {
+  title: 'Basketball',
+  description: 'A basketball',
+  price: 100,
+  stock: 1,
+  code: 999,
+  thumbnail: 'https://productimages.biltema.com/v1/Image/product/xlarge/2000046014/2'
+}
+
+const iphone = {
+  title: 'iPhone',
+  description: 'Overrated phone',
+  price: 1400,
+  stock: 1,
+  code: 400,
+  thumbnail: 'https://www.iphonemodding.com/wp-content/uploads/2021/09/iphone-13-pro-max-1.jpg'
+}
+
+const secretProduct = {
+  title: 'Secret Product',
+  description: 'This product is a secret, could be anything',
+  price: 1000000,
+  stock: 1,
+  code: 12345,
+  thumbnail: 'https://cdn.shopify.com/s/files/1/0327/7763/3930/products/instagram_967d7f69-6556-4e1f-9c53-8009f5147d39.jpg?v=1634813414'
+}
+
+const privateJet = {
+  title: 'Private Jet',
+  description: 'Lets be honest, you will never buy this',
+  price: 10000000,
+  stock: 1,
+  code: 54321,
+  thumbnail: 'https://cdn.forbes.com.mx/2016/01/Phenom-100.jpg'
+}
+
+const messi = {
+  title: 'Messi',
+  description: 'The best player in the world, only 1 available',
+  price: 100000000,
+  stock: 1,
+  code: 11111,
+  thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Lionel-Messi-Argentina-2022-FIFA-World-Cup.jpg'
+}
+
 let productManager = new ProductManager("./products.json");
 
 // Metodos para probar (probar uno a la vez y notar como se actualiza el archivo products.json)
@@ -138,8 +201,17 @@ let productManager = new ProductManager("./products.json");
 //productManager.addProduct(cookie);
 //productManager.addProduct(strawberry);
 //productManager.addProduct(car);
+//productManager.addProduct(guitar);
+//productManager.addProduct(bottle);
+//productManager.addProduct(basketball);
+//productManager.addProduct(iphone);
+//productManager.addProduct(secretProduct);
+//productManager.addProduct(privateJet);
+//productManager.addProduct(messi);
 //productManager.getProducts();
 //productManager.getProductById(3);
 //productManager.getProductById(1);
 //productManager.updateProduct(1, {...dogMemeNFT, 'title': 'Cat Meme NFT', thumbnail: 'https://i.cbc.ca/1.5359228.1577206958!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_940/smudge-the-viral-cat.jpg'});
 //productManager.deleteProduct(1);
+
+module.exports = productManager;

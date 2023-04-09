@@ -1,7 +1,7 @@
 {
   "name": "backend-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Entrega 3 clase 4",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

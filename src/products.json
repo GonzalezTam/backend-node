@@ -34,5 +34,68 @@
     "code": 666,
     "thumbnail": "https://cars.usnews.com/static/images/Auto/izmo/i159615234/2023_acura_integra_angularfront.jpg",
     "id": 3
+  },
+  {
+    "title": "Guitar",
+    "description": "A guitar",
+    "price": 200,
+    "stock": 1,
+    "code": 777,
+    "thumbnail": "https://bienestarconfort.com.ar/wp-content/uploads/2022/10/guitarra-bamboo7-02638dec1c2871de8115865484794780-1024-1024.png",
+    "id": 4
+  },
+  {
+    "title": "Bottle",
+    "description": "A bottle",
+    "price": 10,
+    "stock": 5,
+    "code": 888,
+    "thumbnail": "https://sublitextil.com.ar/wp-content/uploads/2019/04/Botella-Deportiva-Sublimable.png",
+    "id": 5
+  },
+  {
+    "title": "Basketball",
+    "description": "A basketball",
+    "price": 100,
+    "stock": 1,
+    "code": 999,
+    "thumbnail": "https://productimages.biltema.com/v1/Image/product/xlarge/2000046014/2",
+    "id": 6
+  },
+  {
+    "title": "iPhone",
+    "description": "Overrated phone",
+    "price": 1400,
+    "stock": 1,
+    "code": 400,
+    "thumbnail": "https://www.iphonemodding.com/wp-content/uploads/2021/09/iphone-13-pro-max-1.jpg",
+    "id": 7
+  },
+  {
+    "title": "Secret Product",
+    "description": "This product is a secret, could be anything",
+    "price": 1000000,
+    "stock": 1,
+    "code": 12345,
+    "thumbnail": "https://cdn.shopify.com/s/files/1/0327/7763/3930/products/instagram_967d7f69-6556-4e1f-9c53-8009f5147d39.jpg?v=1634813414",
+    "id": 8
+  },
+  {
+    "title": "Private Jet",
+    "description": "Lets be honest, you will never buy this",
+    "price": 10000000,
+    "stock": 1,
+    "code": 54321,
+    "thumbnail": "https://cdn.forbes.com.mx/2016/01/Phenom-100.jpg",
+    "id": 9
+  },
+  {
+    "title": "Messi",
+    "description": "The best player in the world, only 1 available",
+    "price": 100000000,
+    "stock": 1,
+    "code": 11111,
+    "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Lionel-Messi-Argentina-2022-FIFA-World-Cup.jpg",
+    "id": 10
   }
 ]
