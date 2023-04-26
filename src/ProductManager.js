@@ -31,7 +31,7 @@ class ProductManager {
       id,
     };
     products.push(newProduct);
-		console.log('Added product: ', newProduct.title);
+		//console.log('Added product: ', newProduct.title);
     await this.writeProductsToFile(products);
     return newProduct;
   }

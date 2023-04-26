@@ -32,4 +32,8 @@ socketServer.on('connection', (socketClient) => {
     const p = data;
     socketServer.emit('new_product', p);
   })
+  socketClient.on('productDelete', (data) => {
+    const pid = data.id;
+    socketServer.emit('delete_product', pid);
+  })
 })

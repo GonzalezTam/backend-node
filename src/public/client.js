@@ -10,9 +10,8 @@ document.onreadystatechange = async () => {
 }
 
 let socket
-let productsCards = '';
-
 let submit = document.getElementById('submit')
+let removeProduct = document.getElementsByClassName('remove-product')
 let title = document.getElementById('title');
 let category = document.getElementById('category');
 let description = document.getElementById('description');
@@ -24,26 +23,93 @@ let gallery = document.getElementById('products-div')
 socket = io();
 socket.on('new_product', data => {
 	//console.log('new_product:', data);
-	// Agregar el producto al array
 	productsArray[data.id] = data;
+	let productsCards = '';
 	productsArray.forEach(p => {
 		productsCards += `
-			<div class="card m-2 p-0" style="width: 18rem;">
+			<div class="card m-2 p-0" style="width: 16rem;">
 				<img src="http://via.placeholder.com/640x360" class="card-img-top" alt="...">
 				<div class="card-body">
 					<h5 class="card-title">${p.title}</h5>
-					<p class="card-text">Category: ${p.category}</p>
 					<p class="card-text">${p.description}</p>
 				</div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">Price: $${p.price}</li>
 					<li class="list-group-item">Stock: ${p.stock}</li>
+					<li class="list-group-item">ID: ${p.id}</li>
 				</ul>
+				<div class="card-footer text-right">
+					<li class="list-group-item text-end"><button data-id="${p.id}" type="button" class="remove-product btn btn-danger btn-sm">Remove</button></li>
+				</div>
 			</div>
 			`
 	})
+	gallery.innerHTML = '';
 	gallery.innerHTML = productsCards;
+	socket.on('disconnect', () => {
+		console.log('Socket client disconnected');
+	})
 })
+
+socket.on('delete_product', data => {
+	//console.log('delete_product:', data);
+	let productsCards = '';
+	productsArray = productsArray.filter(p => p.id !== data);
+	productsArray.forEach(p => {
+		productsCards += `
+			<div class="card m-2 p-0" style="width: 16rem;">
+				<img src="http://via.placeholder.com/640x360" class="card-img-top" alt="...">
+				<div class="card-body">
+					<h5 class="card-title">${p.title}</h5>
+					<p class="card-text">${p.description}</p>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">Price: $${p.price}</li>
+					<li class="list-group-item">Stock: ${p.stock}</li>
+					<li class="list-group-item">ID: ${p.id}</li>
+				</ul>
+				<div class="card-footer text-right">
+				<li class="list-group-item text-end"><button data-id="${p.id}" type="button" class="remove-product btn btn-danger btn-sm">Remove</button></li>
+				</div>
+			</div>
+			`
+	})
+	gallery.innerHTML = '';
+	gallery.innerHTML = productsCards;
+	socket.on('disconnect', () => {
+		console.log('Socket client disconnected');
+	})
+})
+
+async function delete_product(id) {
+	//console.log('removeProduct', id);
+	try {
+		const response = await fetch(`http://localhost:8080/api/products/${id}`, {
+			method: 'delete',
+		});
+		if (response.status === 200) {
+			const data = await response.json();
+			socket = io();
+			/* Envia producto respetando id unico, permite ademas,
+				contar con todas las validaciones del endpoint.*/
+			socket.emit('productDelete', data.deletedProduct)
+		} else if (response.status === 400) {
+			const data = await response.json();
+			console.error(data.error);
+		} else {
+			throw new Error('Unexpected response');
+		}
+	} catch (err) {
+		console.error(`Error: ${err}`);
+	}
+}
+
+for(let i = 0; i < removeProduct.length; i++) {
+	removeProduct[i].addEventListener('click', (e) => {
+		const id = e.target.dataset.id;
+		delete_product(id);
+	})
+}
 
 submit.addEventListener('click', async (e) => {
 	e.preventDefault();
