@@ -20,6 +20,10 @@ let stock = document.getElementById('stock');
 let code = document.getElementById('code');
 let gallery = document.getElementById('products-div')
 
+document.addEventListener('click', function (e) {
+  if (e.target.matches('.remove-product')) delete_product(e.target.dataset.id);
+}, false);
+
 socket = io();
 socket.on('new_product', data => {
 	//console.log('new_product:', data);
@@ -46,9 +50,6 @@ socket.on('new_product', data => {
 	})
 	gallery.innerHTML = '';
 	gallery.innerHTML = productsCards;
-	socket.on('disconnect', () => {
-		console.log('Socket client disconnected');
-	})
 })
 
 socket.on('delete_product', data => {
@@ -76,9 +77,7 @@ socket.on('delete_product', data => {
 	})
 	gallery.innerHTML = '';
 	gallery.innerHTML = productsCards;
-	socket.on('disconnect', () => {
-		console.log('Socket client disconnected');
-	})
+	if (gallery.innerHTML === '') gallery.innerHTML = '<p class="m-1">No products available.</p>';
 })
 
 async function delete_product(id) {
@@ -102,13 +101,6 @@ async function delete_product(id) {
 	} catch (err) {
 		console.error(`Error: ${err}`);
 	}
-}
-
-for(let i = 0; i < removeProduct.length; i++) {
-	removeProduct[i].addEventListener('click', (e) => {
-		const id = e.target.dataset.id;
-		delete_product(id);
-	})
 }
 
 submit.addEventListener('click', async (e) => {

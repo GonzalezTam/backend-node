@@ -24,10 +24,6 @@ app.use('/', routerViews)
 const socketServer = new Server(httpServer, { port: 8081 });
 
 socketServer.on('connection', (socketClient) => {
-  const referer = socketClient.handshake.headers.referer;
-  if (referer === 'http://localhost:8080/realtimeproducts') {
-    console.log('Socket client connected');
-  }
   socketClient.on('productSubmit', (data) => {
     const p = data;
     socketServer.emit('new_product', p);
