@@ -8,7 +8,7 @@ class ProductManager {
 
   async init() {
     try {
-      const fileContents = await fs.readFile(this.namefile, 'utf-8');
+      const fileContents = await fs.readFile(`src/${this.namefile}`, 'utf-8');
       const savedProducts = JSON.parse(fileContents);
       this.lastId = savedProducts.reduce((max, p) => Math.max(max, p.id), 0);
     } catch (err) {
@@ -79,7 +79,7 @@ class ProductManager {
 
   async getProductsFromFile(type) {
     try {
-      const fileContents = await fs.readFile(this.namefile, 'utf-8');
+      const fileContents = await fs.readFile(`src/${this.namefile}`, 'utf-8');
 			//if (type === 'getProducts') console.log(fileContents);
       return JSON.parse(fileContents);
     } catch (err) {
@@ -89,7 +89,7 @@ class ProductManager {
   }
 
   async writeProductsToFile(products) {
-    await fs.writeFile(this.namefile, JSON.stringify(products, null, 2));
+    await fs.writeFile(`src/${this.namefile}`, JSON.stringify(products, null, 2));
   }
 }
 
