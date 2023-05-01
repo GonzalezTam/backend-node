@@ -8,7 +8,7 @@ class CartManager {
 
   async init() {
     try {
-      const fileContents = await fs.readFile(this.namefile, 'utf-8');
+      const fileContents = await fs.readFile(`src/${this.namefile}`, 'utf-8');
       const savedCarts = JSON.parse(fileContents);
       this.lastId = savedCarts.reduce((max, p) => Math.max(max, p.id), 0);
     } catch (err) {
@@ -96,7 +96,7 @@ async addProductToCart(cartId, productId, quantity) {
 
   async getCartsFromFile(type) {
     try {
-      const fileContents = await fs.readFile(this.namefile, 'utf-8');
+      const fileContents = await fs.readFile(`src/${this.namefile}`, 'utf-8');
 			//if (type === 'getCarts') console.log(fileContents);
       return JSON.parse(fileContents);
     } catch (err) {
@@ -106,7 +106,7 @@ async addProductToCart(cartId, productId, quantity) {
   }
 
   async writeCartsToFile(carts) {
-    await fs.writeFile(this.namefile, JSON.stringify(carts, null, 2));
+    await fs.writeFile(`src/${this.namefile}`, JSON.stringify(carts, null, 2));
   }
 }
 

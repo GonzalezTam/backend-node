@@ -36,11 +36,11 @@ router.post('/:cid/product/:pid', async (req, res) => {
 	const cartId = +req.params.cid;
 	const productId = +req.params.pid;
 	const quantity = 1;
-	if (!cartId) {
+	if (!req.params.cid) {
 		res.status(400).send({ error: 'No Cart ID provided' });
 		return;
 	}
-	if (!productId) {
+	if (!req.params.pid) {
 		res.status(400).send({ error: 'No Product ID provided' });
 		return;
 	}
