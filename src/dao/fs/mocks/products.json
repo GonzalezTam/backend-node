@@ -1,0 +1,13 @@
+[
+  {
+    "title": "Product",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
+    "price": 100,
+    "stock": 5,
+    "code": "xxx-1",
+    "status": true,
+    "category": "Category",
+    "thumbnails": [],
+    "id": 0
+  }
+]
