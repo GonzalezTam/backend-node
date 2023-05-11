@@ -1,23 +1,19 @@
-{{!--<div class="container">
-  <div class="row mt-5"><h1>Chat</h1></div>
-  <div class="row mt-3">
-    {{#if products.length}}
-      {{#each products}}
-        <div class="card m-2 p-0" style="width: 16rem;">
-          <img src="http://via.placeholder.com/640x360" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{this.title}}</h5>
-            <p class="card-text">{{this.description}}</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Price: ${{this.price}}</li>
-            <li class="list-group-item">Stock: {{this.stock}}</li>
-            <li class="list-group-item">ID: {{this._id}}</li>
-          </ul>
-        </div>
-      {{/each}}
-    {{else}}
-      <p class="m-1">No chat available</p>
-    {{/if}}
+<h1 class="mx-5 mt-5">Chat - 😏</h1>
+
+<div class="mx-5 mt-5 mb-3">
+    <i id="username" class="mx-3"></i> <input id="chatBox" class="mx-2" style="width: 20em" type="text" hidden>
+</div>
+
+{{#if messages.length}}
+  <div id="history">
+    {{#each messages}}
+      <div class="container message mx-3"><span class="mx-4 small" style="color:lightgray">{{this.date}}</span><strong>[{{this.user}}]</strong>: {{this.message}}</div>
+    {{/each}}
   </div>
-</div>--}}
+{{else}}
+  <div id="history"></div>
+{{/if}}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="chat.js"></script>

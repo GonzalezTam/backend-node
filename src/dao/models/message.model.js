@@ -4,6 +4,7 @@ const messageCollection = 'messages'
 const messageSchema = new mongoose.Schema({
 	user: { type: String, required: true },
 	message: { type: String, required: true },
+	date: { type: Date, required: true },
 })
 
 const messageModel = mongoose.model(messageCollection, messageSchema)

@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const routerViews = require('./routes/views.router.js');
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
+const chatRouter = require('./routes/chat.router');
 
 async function connectDB() {
   try{
@@ -35,19 +36,25 @@ try {
   app.use(express.static('./src/public'))
   app.use('/api/products', productsRouter);
   app.use('/api/carts', cartsRouter);
+  app.use('/api/chat', chatRouter);
   app.use('/', routerViews)
 
   const socketServer = new Server(httpServer, { port: 8081 });
 
   socketServer.on('connection', (socketClient) => {
     socketClient.on('productSubmit', (data) => {
-      console.log('productSubmit', data)
+      //console.log('productSubmit', data)
       const p = data;
       socketServer.emit('new_product', p);
     })
     socketClient.on('productDelete', (data) => {
       const pid = data._id;
       socketServer.emit('delete_product', pid);
+    })
+    socketClient.on('messageSent', (data) => {
+      //console.log(`New message: ${data}`)
+      const m = data;
+      socketServer.emit('history', m)
     })
   })
 } catch (error) {
