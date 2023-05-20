@@ -1,10 +1,9 @@
 let productsArray = [];
 document.onreadystatechange = async () => {
-	await fetch('http://localhost:8080/api/products')
+	await fetch(`http://localhost:8080/api/products?limit=all`)
 		.then(res => res.json())
 		.then(data => {
-			//console.log('fetch', data);
-			productsArray = data.products;
+			productsArray = data.products.payload;
 		})
 		.catch(err => console.log(err))
 }
