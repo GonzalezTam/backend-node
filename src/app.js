@@ -48,6 +48,14 @@ try {
       const pid = data._id;
       socketServer.emit('delete_product', pid);
     })
+    socketClient.on('cartCreated', (data) => {
+      const cart = data;
+      socketServer.emit('cartCreated', cart);
+    })
+    socketClient.on('cartUpdated', (data) => {
+      const cart = data;
+      socketServer.emit('cartUpdated', cart);
+    })
   })
 } catch (error) {
   console.log("Server Error")

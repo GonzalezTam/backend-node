@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row mt-5"><h1>Cart Products</h1></div>
+  <div class="row mt-3">
+    {{#if products.length}}
+      {{#each products}}
+        <div class="card m-2 p-0" style="width: 17rem;">
+          <img src="http://via.placeholder.com/640x360" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{this.productId.title}}</h5>
+            <p class="card-text">{{this.productId.description}}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Price: ${{this.productId.price}}</li>
+            <li class="list-group-item">Stock: {{this.productId.stock}}</li>
+            <li class="list-group-item">Code: {{this.productId.code}}</li>
+            <li class="list-group-item">ID: {{this.productId._id}}</li>
+          </ul>
+        </div>
+      {{/each}}
+    {{else}}
+      <p class="m-1">No products available</p>
+    {{/if}}
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>

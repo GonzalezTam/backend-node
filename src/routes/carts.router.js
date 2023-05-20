@@ -13,7 +13,7 @@ router.get('/:cid', async (req, res) => {
 	const id = req.params.cid;
 	try{
 		const cart = await cartModel.findOne({ _id: id }).populate('products.productId').lean().exec();
-		if (cart) res.status(200).send({ 'Cart found' : cart }); else res.status(404).send({ 'Cart not found' : id });
+		if (cart) res.status(200).send({ cart }); else res.status(404).send({ 'Cart not found' : id });
 	} catch (error) {
 		console.log(error);
 		res.status(404).send({ 'Cart not found' : id });
@@ -34,7 +34,7 @@ router.put('/:cid', async (req, res) => {
 	try{
 		const cart = await cartModel.findOne({ _id: id }).lean().exec();
 		await cartModel.updateOne({ _id: id }, { products }).lean().exec();
-		res.status(200).send({ 'Cart updated' : cart });
+		res.status(200).send({ updatedCart: cart });
 	} catch (error) {
 		res.status(404).send({ 'Cart not found' : id });
 	}
@@ -45,7 +45,7 @@ router.delete('/:cid', async (req, res) => {
 	try{
 		const cart = await cartModel.findOne({ _id: id }).lean().exec();
 		await cartModel.deleteOne({ _id: id }).lean().exec();
-		res.status(200).send({ 'Cart and its products deleted' : cart });
+		res.status(200).send({ cartDeleted : cart });
 	} catch (error) {
 		res.status(404).send({ 'Cart not found' : id });
 	}
@@ -62,10 +62,10 @@ router.post('/', async (req, res) => {
 		return;
 	}
 	const cart = await cartModel.create({ products });
-	res.status(200).send({ 'Cart created' : cart });
+	res.status(200).send({ cartCreated: cart });
 });
 
-router.post('/:cid/product/:pid', async (req, res) => {
+router.post('/:cid/products/:pid', async (req, res) => {
 	const cartId = req.params.cid;
 	const productId = req.params.pid;
 	const quantity = 0;
@@ -85,11 +85,11 @@ router.post('/:cid/product/:pid', async (req, res) => {
 		if (!productInCart) {
 			//console.log('Adding new product to cart');
 			const updatedCart = await cartModel.findOneAndUpdate({ _id: cartId }, { $push: { products: { productId, quantity: quantity+1 } } }).lean().exec();
-			res.status(200).send({ 'Product added to cart' : updatedCart });
+			res.status(200).send({ updatedCart });
 		} else {
 			//console.log('Product already in cart, updating quantity');
 			const updatedCart = await cartModel.updateOne({ _id: cartId, 'products.productId': productId }, { $inc: { 'products.$.quantity': 1 } }).lean().exec();
-			res.status(200).send({ 'Product added to cart' : updatedCart });
+			res.status(200).send({ updatedCart });
 		}
 	} catch (error) {
 		console.log(error);
@@ -97,7 +97,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
 	}
 });
 
-router.put('/:cid/product/:pid', async (req, res) => {
+router.put('/:cid/products/:pid', async (req, res) => {
 	const cartId = req.params.cid;
 	const productId = req.params.pid;
 	const quantity = +req.body.quantity;
@@ -120,29 +120,28 @@ router.put('/:cid/product/:pid', async (req, res) => {
 			res.status(404).send({ error: 'Product not in cart' });
 		} else {
 			const updatedCart = await cartModel.updateOne({ _id: cartId, 'products.productId': productId }, { $set: { 'products.$.quantity': quantity } }).lean().exec();
-			res.status(200).send({ 'Product quantity updated' : updatedCart });
+			res.status(200).send({ updatedCart });
 		}
 	} catch (error) {
 		res.status(400).send({ 'Error updating product quantity' : error.message });
 	}
 });
 
-router.delete('/:cid/product/:pid', async (req, res) => {
+router.delete('/:cid/products/:pid', async (req, res) => {
 	const cartId = req.params.cid;
 	const productId = req.params.pid;
 	try {
 		const cart = await cartModel.findOne({ _id: cartId }).lean().exec();
 		let productInCart = Object.values(cart.products).find(product => product.productId === productId);
-		console.log('prod', productInCart);
 		if (!productInCart) {
 			res.status(404).send({ error: 'Product not in cart' });
 		} else {
 			if (productInCart.quantity === 1) { // if quantity is 1, remove product from cart
 				const updatedCart = await cartModel.updateOne({ _id: cartId }, { $pull: { products: { productId } } }).lean().exec();
-				res.status(200).send({ 'Product removed from cart' : updatedCart });
+				res.status(200).send({ productRemoved : updatedCart });
 			} else { // if quantity is greater than 1, decrement quantity
 				const updatedCart = await cartModel.updateOne({ _id: cartId, 'products.productId': productId }, { $inc: { 'products.$.quantity': -1 } }).lean().exec();
-				res.status(200).send({ 'Product removed from cart' : updatedCart });
+				res.status(200).send({ productRemoved: updatedCart });
 			}
 		}
 	} catch (error) {

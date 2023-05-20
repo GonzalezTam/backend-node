@@ -1,4 +1,5 @@
 let productsArray = [];
+let userCart;
 document.onreadystatechange = async () => {
 	await fetch(`http://localhost:8080/api/products?limit=all`)
 		.then(res => res.json())
@@ -11,6 +12,8 @@ document.onreadystatechange = async () => {
 let socket
 let submit = document.getElementById('submit')
 let removeProduct = document.getElementsByClassName('remove-product')
+let addToCart = document.getElementsByClassName('add-to-cart')
+let cart = document.getElementById('my-cart')
 let title = document.getElementById('title');
 let category = document.getElementById('category');
 let description = document.getElementById('description');
@@ -21,6 +24,11 @@ let gallery = document.getElementById('products-div')
 
 document.addEventListener('click', function (e) {
   if (e.target.matches('.remove-product')) delete_product(e.target.dataset.id);
+	if (userCart && userCart._id) {
+		if (e.target.matches('.add-to-cart')) update_cart(e.target.dataset.id);
+	} else {
+		if (e.target.matches('.add-to-cart')) create_cart(e.target.dataset.id);
+	}
 }, false);
 
 socket = io();
@@ -103,7 +111,81 @@ async function delete_product(id) {
 	}
 }
 
-submit.addEventListener('click', async (e) => {
+socket.on('cartCreated', data => {
+	//console.log('cartCreated', data);
+	userCart = { _id: data._id, products: data.products };
+	let userCartLength = userCart.products?.length || 0;
+	cart.innerHTML = '<h2>My Cart 🛒 (' + userCartLength + ')</h2>';
+})
+
+socket.on('cartUpdated', data => {
+	//console.log('cartUpdated', data);
+	userCart = { _id: data._id, products: data.products };
+	let userCartLength= 0;
+	for (const p of userCart.products) {
+		userCartLength += p.quantity;
+	}
+	cart.innerHTML = '<h2>My Cart 🛒 (' + userCartLength + ')</h2>';
+})
+
+async function create_cart(id) {
+	//console.log('first_in_cart', id);
+	try {
+		const body = {
+			"products": [
+				{
+					"productId": id,
+					"quantity": 1
+				}
+			]
+		}
+		const response = await fetch('http://localhost:8080/api/carts', {
+			method: 'post',
+			body: JSON.stringify(body),
+			headers: { 'Content-Type': 'application/json' },
+		});
+		if (response.status === 200) {
+			const data = await response.json();
+			socket = io();
+			socket.emit('cartCreated', data.cartCreated)
+		} else if (response.status === 400) {
+			const data = await response.json();
+			console.error(data.error);
+		} else {
+			throw new Error('Unexpected response');
+		}
+	} catch (err) {
+		console.error(`Error: ${err}`);
+	}
+}
+
+async function update_cart(id) {
+	//console.log('productId', id);
+	//console.log('cartId', userCart._id);
+	let cartId = userCart._id;
+	let productId = id;
+	try {
+		const response = await fetch(`http://localhost:8080/api/carts/${cartId}/products/${productId}`, {
+			method: 'post',
+			headers: { 'Content-Type': 'application/json' },
+		});
+		if (response.status === 200) {
+			const fetchUpdatedCart = await fetch(`http://localhost:8080/api/carts/${cartId}`);
+			const dataUpdatedCart = await fetchUpdatedCart.json();
+			socket = io();
+			socket.emit('cartUpdated', dataUpdatedCart.cart)
+		} else if (response.status === 400) {
+			const data = await response.json();
+			console.error(data.error);
+		} else {
+			throw new Error('Unexpected response');
+		}
+	} catch (err) {
+		console.error(`Error: ${err}`);
+	}
+}
+
+submit?.addEventListener('click', async (e) => {
 	e.preventDefault();
 	//console.log('submit');
 	try {
