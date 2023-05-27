@@ -2,15 +2,40 @@ const express = require('express')
 const productModel = require('./../dao/models/product.model');
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-	let products = await productModel.find().lean().exec();
-	const limit = req.query.limit;
-	if (limit) {
-		let productsLimit = products.slice(0, limit);
-    res.render('index', {products: productsLimit})
-	} else {
-    res.render('index', {products: products})
-	}
+// if user is not logged in, redirect to login page.
+const auth = (req, res, next) => {
+	//console.log('req.session', req.session)
+	if (req.session.user) return next();
+	//return res.send('Access denied')
+	return res.redirect('/login')
+}
+
+// if user is logged in, redirect to profile.
+const activeSession = (req, res, next) => {
+	//console.log('req.session', req.session)
+	if (!req.session.user) return next();
+	//return res.send('Access denied')
+	return res.redirect('/profile')
+}
+
+// deprecated route... use /products instead.
+router.get('/', auth, async (req, res) => {
+		let products = await productModel.find().lean().exec();
+		const limit = req.query.limit;
+		if (limit) {
+			let productsLimit = products.slice(0, limit);
+			res.render('index', {products: productsLimit})
+		} else {
+			res.render('index', {products: products})
+		}
+	})
+
+router.get('/register', activeSession, (req, res) => res.render('register'));
+
+router.get('/login', activeSession, (req, res) => res.render('login'));
+
+router.get('/profile', auth, (req, res) => {
+	res.render('profile', {user: req.session.user})
 })
 
 router.get('/realtimeproducts', async (req, res) => {
@@ -25,21 +50,21 @@ router.get('/realtimeproducts', async (req, res) => {
 	}
 })
 
-router.get('/products', async (req, res) => {
+router.get('/products', auth, async (req, res) => {
+	const user = req.session?.user;
 	let page = +req.query.page;
 	if (!page) page = 1
 	let result;
 	await fetch(`http://localhost:8080/api/products?page=${page}`)
 		.then(res => res.json())
 		.then(data => {
-			//console.log(data);
 			result = data;
 		})
 		.catch(err => console.log(err))
-  return res.render('products', {products: result.products})
+  return res.render('products', {user: user, products: result.products})
 })
 
-router.get('/carts/:cid', async (req, res) => {
+router.get('/carts/:cid', auth, async (req, res) => {
 	let cid = req.params.cid;
 	let result;
 	await fetch(`http://localhost:8080/api/carts/${cid}`)

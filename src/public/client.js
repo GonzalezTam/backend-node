@@ -1,5 +1,6 @@
 let productsArray = [];
 let userCart;
+let reqUserSession;
 document.onreadystatechange = async () => {
 	await fetch(`http://localhost:8080/api/products?limit=all`)
 		.then(res => res.json())
@@ -115,7 +116,7 @@ socket.on('cartCreated', data => {
 	//console.log('cartCreated', data);
 	userCart = { _id: data._id, products: data.products };
 	let userCartLength = userCart.products?.length || 0;
-	cart.innerHTML = '<h2>My Cart 🛒 (' + userCartLength + ')</h2>';
+	cart.innerHTML = '🛒 (' + userCartLength + ')';
 })
 
 socket.on('cartUpdated', data => {
@@ -125,7 +126,7 @@ socket.on('cartUpdated', data => {
 	for (const p of userCart.products) {
 		userCartLength += p.quantity;
 	}
-	cart.innerHTML = '<h2>My Cart 🛒 (' + userCartLength + ')</h2>';
+	cart.innerHTML = '🛒 (' + userCartLength + ')';
 })
 
 async function create_cart(id) {

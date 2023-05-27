@@ -1,7 +1,7 @@
 {
   "name": "backend-node",
   "version": "1.0.0",
-  "description": "Entrega 5 clase 6",
+  "description": "Entrega 8 clase 10",
   "main": "src/app.js",
   "scripts": {
     "start": "node .",
@@ -13,8 +13,10 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "connect-mongo": "^5.0.0",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
+    "express-session": "^1.17.3",
     "mongoose": "^7.1.0",
     "mongoose-paginate-v2": "^1.7.1",
     "socket.io": "^4.6.1"
