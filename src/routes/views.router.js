@@ -4,17 +4,14 @@ const router = express.Router()
 
 // if user is not logged in, redirect to login page.
 const auth = (req, res, next) => {
-	//console.log('req.session', req.session)
 	if (req.session.user) return next();
-	//return res.send('Access denied')
-	return res.redirect('/login')
+	const failed = req.query.failed || true;
+	return res.redirect(`/login?failed=${failed}`) //`/login?failed=${failed}
 }
 
 // if user is logged in, redirect to profile.
 const activeSession = (req, res, next) => {
-	//console.log('req.session', req.session)
 	if (!req.session.user) return next();
-	//return res.send('Access denied')
 	return res.redirect('/profile')
 }
 
@@ -30,9 +27,18 @@ router.get('/', auth, async (req, res) => {
 		}
 	})
 
-router.get('/register', activeSession, (req, res) => res.render('register'));
+router.get('/register', activeSession, (req, res) => {
+	const failed = req.query.failed;
+	if (failed) return res.render('register', {message: 'Register Failed. Something went wrong.'})
+	res.render('register')
+});
 
-router.get('/login', activeSession, (req, res) => res.render('login'));
+router.get('/login', activeSession, (req, res) => {
+	const failed = req.query.failed;
+	if (failed === 'true') return res.render('login', {message: 'Login Failed. Username or password incorrect.'})
+	if (failed === 'github') return res.render('login', {message: 'Github Login Failed. Check your github account email.'})
+	res.render('login')
+});
 
 router.get('/profile', auth, (req, res) => {
 	res.render('profile', {user: req.session.user})

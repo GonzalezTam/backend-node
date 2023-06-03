@@ -4,6 +4,9 @@ const express = require('express');
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
 
+const passport = require('passport');
+const initializePassport = require('./passport.config.js');
+
 const handlebars = require('express-handlebars');
 const { Server } = require('socket.io');
 const viewsRouter = require('./routes/views.router.js');
@@ -46,6 +49,10 @@ try {
     resave: true,
     saveUninitialized: true
 }))
+
+  initializePassport();
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.engine('handlebars', handlebars.engine())
   app.set('views', './src/views')

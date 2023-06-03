@@ -3,7 +3,9 @@ const loginButton = document.getElementById('login-button');
 const logoutButton = document.getElementById('logout-button');
 
 const loginErrorDiv = document.getElementById('login-error');
+const loginFailedDiv = document.getElementById('login-failed');
 const registerErrorDiv = document.getElementById('register-error');
+const registerFailedDiv = document.getElementById('register-failed');
 
 loginButton?.addEventListener('click', (e) => {
 	e.preventDefault();
@@ -16,7 +18,6 @@ signUpButton?.addEventListener('click', (e) => {
 });
 
 logoutButton?.addEventListener('click', (e) => {
-	console.log('logout');
 	e.preventDefault();
 	logout();
 });
@@ -51,6 +52,7 @@ async function register() {
 			document.location.href = '/login';
 		} else if (response.status === 400) {
 			const data = await response.json();
+			if (registerFailedDiv && registerFailedDiv.hidden === false) registerFailedDiv.hidden = true;
 			registerErrorDiv.hidden = false;
 			registerErrorDiv.innerText = data.message;
 			console.error(data.error);
@@ -78,8 +80,9 @@ async function login() {
 		});
 		if (response.status === 200) {
 			document.location.href = '/products';
-		} else if (response.status === 400) {
+		} else if (response.status === 400 || response.status === 401 || response.status === 403) {
 			const data = await response.json();
+			if (loginFailedDiv && loginFailedDiv.hidden === false) loginFailedDiv.hidden = true;
 			loginErrorDiv.hidden = false;
 			loginErrorDiv.innerText = data.message;
 			console.error(data.message);
@@ -98,7 +101,7 @@ async function logout() {
 			headers: { 'Content-Type': 'application/json' },
 		});
 		if (response.status === 200) {
-			document.location.href = '/';
+			document.location.href = '/login';
 		} else if (response.status === 400) {
 			const data = await response.json();
 			console.error(data.message);
